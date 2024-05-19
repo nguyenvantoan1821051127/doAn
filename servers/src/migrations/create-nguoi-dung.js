@@ -5,9 +5,8 @@ module.exports = {
     await queryInterface.createTable('NguoiDungs', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       name: {
         type: Sequelize.STRING
@@ -27,7 +26,14 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
     });
   },
   async down(queryInterface, Sequelize) {

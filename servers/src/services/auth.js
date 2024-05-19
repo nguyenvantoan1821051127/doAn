@@ -7,46 +7,45 @@ require('dotenv').config()
 
 const hashPassword= password=>bcrypt.hashSync(password,bcrypt.genSaltSync(10))
 
-export const registerService=({phone,password,name})=> new Promise(async(resolve,reject)=>{
-    try{
-        const respone= await db.NguoiDung.findOrCreate({
-            where:{phone},
-            default:{
+export const registerService = ({ phone, password, name }) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.NguoiDung.findOrCreate({
+            where: { phone },
+            defaults: {
                 phone,
                 name,
-                password:hashPassword(password),
-                id:v4()
+                password: hashPassword(password),
+                id: v4()
             }
         })
-        const token= respone[1] && jwt.sign({id:response[0].id,phone:respone[0].phone},process.env.SECRFT_KEY,{expiresIn:'20d'})
+        const token = response[1] && jwt.sign({ id: response[0].id, phone: response[0].phone }, process.env.SECRET_KEY, { expiresIn: '10d' })
         resolve({
-            err: token ? 0 :2,
-            msg: token ? 'register is successfulyy': 'phone number has been aldryeady userd',
+            err: token ? 0 : 2,
+            msg: token ? 'Register is successfully !' : 'Phone number has been aldready used !',
             token: token || null
         })
-    
-    }catch(error){
+
+    } catch (error) {
         reject(error)
     }
 })
 
 
-export const loginService=({phone,password})=> new Promise(async(resolve,reject)=>{
-    try{
-        const respone= await db.NguoiDung.findOne({
-            where:{phone},
-            raw:true
-            }
-        )
-        const isCrrectPassword= respone && bcrypt.compareSync(password,respone.password)
-        const token= isCrrectPassword && jwt.sign({id:response[0].id,phone:respone[0].phone},process.env.SECRFT_KEY,{expiresIn:'20d'})
+export const loginService = ({ phone, password }) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.NguoiDung.findOne({
+            where: { phone },
+            raw: true
+        })
+        const isCorrectPassword = response && bcrypt.compareSync(password, response.password)
+        const token = isCorrectPassword && jwt.sign({ id: response.id, phone: response.phone }, process.env.SECRET_KEY, { expiresIn: '2d' })
         resolve({
-            err: token ? 0 :2,
-            msg: token ? 'login is successfulyy': respone ? 'password is wrong !': 'phone number has been aldryeady userd',
+            err: token ? 0 : 2,
+            msg: token ? 'Login is successfully !' : response ? 'Password is wrong !' : 'Phone number not found !',
             token: token || null
         })
-    
-    }catch(error){
+
+    } catch (error) {
         reject(error)
     }
-})
+}) 
