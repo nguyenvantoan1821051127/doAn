@@ -1,4 +1,6 @@
 'use strict';
+const { v4: uuidv4 } = require('uuid');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -6,7 +8,8 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: () => uuidv4()
       },
       name: {
         type: Sequelize.STRING
