@@ -4,6 +4,6 @@ import * as controllers from '../controllers/phong'
 
 const router=express.Router()
 
-router.get('/all', controllers.getPhongs)
+router.get('/phong', controllers.getPhong)
 
 export default router

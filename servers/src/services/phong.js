@@ -1,12 +1,12 @@
 import db from '../models'
 
-//get all category
-export const getAllPhongService = ()=> new Promise(async(resolve,reject)=>{
+export const getPhongByIdService = (id)=> new Promise(async(resolve,reject)=>{
     try{
-        const response = await db.Phong.finAll({raw: true})
+        const response = await db.Phong.findOne({where: { id },raw: true})
+        console.log("response",response);
         resolve({
             err: response ? 0 :1,
-            msg: response ? 'ok' : 'failed to get phong',
+            msg: response ? 'ok' : 'failed to get khach san',
             response
         })
     }
